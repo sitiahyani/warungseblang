@@ -9,40 +9,150 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-body{font-family:'Inter',sans-serif;background:#f4f7fc;}
-.main-sidebar{box-shadow:2px 0 12px rgba(0,0,0,.04);}
-.brand-link{background:#0a3147;color:white;text-align:center;padding:18px;}
-.brand-link:hover{color:white;}
-.brand-text{font-weight:700;font-size:1.1rem;}
-.brand-sub{font-size:.75rem;opacity:.8;}
-
-.nav-sidebar .nav-link{font-weight:500;font-size:.9rem;border-radius:8px;margin:2px 10px;}
-.nav-sidebar .nav-link.active{background:#1d4e6b !important;color:white !important;}
-.nav-sidebar .nav-link.active i{color:white !important;}
-
-.card{border-radius:12px;border:none;box-shadow:0 4px 12px rgba(0,0,0,.03);}
-.card-header{font-weight:600;}
-.table{margin:0;}
-.main-footer{font-size:.85rem;}
-
-.offline-save-btn{
-position:fixed;bottom:25px;right:25px;
-padding:10px 18px;border-radius:30px;border:none;
-background:white;font-weight:600;color:#1d4e6b;
-box-shadow:0 6px 15px rgba(0,0,0,.08);z-index:1050;
+<!-- Tailwind SAFE MODE -->
+<script>
+tailwind.config = {
+  corePlugins: {
+    preflight: false,
+  }
 }
-.offline-save-btn:hover{background:#f0f9ff;}
-/* Sidebar full height & scroll sendiri */
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+    font-family:'Inter',sans-serif;
+}
+
+/* ===== NAVBAR CLEAN ===== */
+.main-header{
+    background:#ffffff !important;
+    border-bottom:1px solid #e5e7eb !important;
+    box-shadow:none !important;
+    padding:0.5rem 1rem;
+}
+
+.navbar .nav-link{
+    color:#334155 !important;
+    font-weight:500;
+}
+
+.navbar .nav-link:hover{
+    color:#0f172a !important;
+}
+
+/* ===== SIDEBAR MODERN ===== */
+.main-sidebar{
+    background:#ffffff;
+    border-right:1px solid #e5e7eb;
+    box-shadow:none;
+}
+
+.custom-brand{
+    background:#ffffff;
+    border-bottom:1px solid #e5e7eb;
+    padding:20px 10px 18px;
+}
+
+.brand-title{
+    font-size:1.05rem;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#0f172a;
+}
+
+.brand-subtitle{
+    font-size:.7rem;
+    color:#64748b;
+    letter-spacing:1px;
+    margin-top:4px;
+}
+
+.nav-sidebar .nav-link{
+    border-radius:12px;
+    margin:4px 12px;
+    font-size:.9rem;
+    font-weight:500;
+    color:#475569;
+    transition:all .2s ease;
+}
+
+.nav-sidebar .nav-link:hover{
+    background:#f1f5f9;
+    color:#0f172a;
+}
+
+.nav-sidebar .nav-link.active{
+    background:#2563eb !important;
+    color:#ffffff !important;
+}
+
+.nav-sidebar .nav-link.active i{
+    color:#ffffff !important;
+}
+
+.nav-header{
+    font-size:.65rem;
+    font-weight:600;
+    color:#94a3b8;
+    letter-spacing:1px;
+    margin:18px 18px 6px;
+}
+
+/* ===== CONTENT ===== */
+.content-wrapper{
+    background:#f8fafc;
+}
+
+/* ===== CARD MODERN ===== */
+.card{
+    border-radius:18px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 4px 12px rgba(0,0,0,.03);
+}
+
+.card-header{
+    background:#ffffff;
+    border-bottom:1px solid #e5e7eb;
+    font-weight:600;
+}
+
+/* ===== TABLE CLEAN ===== */
+.table{
+    margin:0;
+}
+
+.table thead{
+    background:#f8fafc;
+}
+
+.table th{
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:#64748b;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.table td{
+    border-top:1px solid #f1f5f9;
+}
+
+/* ===== FOOTER ===== */
+.main-footer{
+    background:#ffffff;
+    border-top:1px solid #e5e7eb;
+    font-size:.8rem;
+}
+
+/* ===== SIDEBAR SCROLL ===== */
 .main-sidebar .sidebar {
     height: calc(100vh - 70px);
     overflow-y: auto;
     overflow-x: hidden;
     padding-bottom: 40px;
-    scroll-behavior: smooth;
 }
 
-/* Scrollbar lebih halus */
 .main-sidebar .sidebar::-webkit-scrollbar {
     width: 6px;
 }
@@ -51,36 +161,20 @@ box-shadow:0 6px 15px rgba(0,0,0,.08);z-index:1050;
     background: rgba(0,0,0,0.15);
     border-radius: 10px;
 }
-
-.main-sidebar .sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,0,0,0.25);
-}
-/* ===== BRAND TEXT ONLY ===== */
-.custom-brand {
-    background: #0b2f44;
-    padding: 20px 10px 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+/* ===== NAIKKAN NAV HEADER ===== */
+.nav-sidebar > .nav-header:first-child{
+    margin-top: 5px !important;
+    padding-top: 0 !important;
 }
 
-.brand-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #ffffff;
+/* ❗ OFFLINE BUTTON TIDAK DIUBAH */
+.offline-save-btn{
+position:fixed;bottom:25px;right:25px;
+padding:10px 18px;border-radius:30px;border:none;
+background:white;font-weight:600;color:#1d4e6b;
+box-shadow:0 6px 15px rgba(0,0,0,.08);z-index:1050;
 }
-
-.brand-subtitle {
-    font-size: 0.75rem;
-    color: #ffffff;
-    opacity: 0.8;
-    letter-spacing: 1.5px;
-    margin-top: 4px;
-}
-.custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
+.offline-save-btn:hover{background:#f0f9ff;}
 </style>
 </head>
 
@@ -243,60 +337,61 @@ class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
 
 </ul>
 </li>
-
 <!-- ================= PENGATURAN TRANSAKSI ================= -->
-<li class="nav-header">PENGATURAN TRANSAKSI</li>
+<li class="nav-item {{ request()->is('admin/pajak*') || request()->is('admin/diskon*') || request()->is('admin/shift*') ? 'menu-open' : '' }}">
+    
+    <a href="#" class="nav-link {{ request()->is('admin/pajak*') || request()->is('admin/diskon*') || request()->is('admin/shift*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-cogs"></i>
+        <p>
+            Pengaturan Transaksi
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
 
-<li class="nav-item">
-<a href="{{ url('/admin/pajak') }}" class="nav-link {{ request()->is('admin/pajak*') ? 'active' : '' }}">
-<i class="fas fa-percent nav-icon"></i>
-<p>Pajak</p>
-</a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{ url('/admin/pajak') }}" class="nav-link {{ request()->is('admin/pajak*') ? 'active' : '' }}">
+                <i class="fas fa-percent nav-icon"></i>
+                <p>Pajak</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ url('/admin/diskon') }}" class="nav-link {{ request()->is('admin/diskon*') ? 'active' : '' }}">
+                <i class="fas fa-tags nav-icon"></i>
+                <p>Diskon</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ url('/admin/shift') }}" class="nav-link {{ request()->is('admin/shift*') ? 'active' : '' }}">
+                <i class="fas fa-clock nav-icon"></i>
+                <p>Shift</p>
+            </a>
+        </li>
+    </ul>
 </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/diskon') }}" class="nav-link {{ request()->is('admin/diskon*') ? 'active' : '' }}">
-<i class="fas fa-tags nav-icon"></i>
-<p>Diskon</p>
-</a>
-</li>
-
-<li class="nav-item">
-<a href="{{ url('/admin/shift') }}" class="nav-link {{ request()->is('admin/shift*') ? 'active' : '' }}">
-<i class="fas fa-clock nav-icon"></i>
-<p>Shift</p>
-</a>
-</li>
-
-<!-- ================= LAPORAN ================= -->
 <!-- ================= LAPORAN ================= -->
 <li class="nav-header">LAPORAN</li>
 
 <li class="nav-item 
 {{ request()->is(
 'admin/jurnal*','admin/buku-besar*','admin/laba-rugi*',
-'admin/posisi-keuangan*',
-'admin/arus-kas*',
-'admin/laporan-penjualan*',
-'admin/laporan-pembelian*',
-'admin/laporan-pajak*',
-'admin/laporan-shift*',
-'admin/laporan-stok*',
-'admin/laporan-hutang*',
+'admin/posisi-keuangan*','admin/catatan-keuangan*',
+'admin/laporan-penjualan*','admin/laporan-pembelian*',
+'admin/laporan-pajak*','admin/laporan-shift*',
+'admin/laporan-stok*','admin/laporan-hutang*',
 'admin/laporan-piutang*'
 ) ? 'menu-open' : '' }}">
 
 <a href="#" class="nav-link 
 {{ request()->is(
-'admin/laba-rugi*',
-'admin/posisi-keuangan*',
-'admin/arus-kas*',
-'admin/laporan-penjualan*',
-'admin/laporan-pembelian*',
-'admin/laporan-pajak*',
-'admin/laporan-shift*',
-'admin/laporan-stok*',
-'admin/laporan-hutang*',
+'admin/jurnal*','admin/buku-besar*','admin/laba-rugi*',
+'admin/posisi-keuangan*','admin/catatan-keuangan*',
+'admin/laporan-penjualan*','admin/laporan-pembelian*',
+'admin/laporan-pajak*','admin/laporan-shift*',
+'admin/laporan-stok*','admin/laporan-hutang*',
 'admin/laporan-piutang*'
 ) ? 'active' : '' }}">
 
@@ -309,98 +404,143 @@ Laporan
 
 <ul class="nav nav-treeview">
 
-<li class="nav-item">
-<a href="{{ url('/admin/jurnal') }}" class="nav-link {{ request()->is('admin/jurnal*') ? 'active' : '' }}">
-<i class="fas fa-book-open nav-icon"></i>
-<p>Jurnal Umum</p>
+<!-- ================= LAPORAN AKUNTANSI ================= -->
+<li class="nav-item 
+{{ request()->is(
+'admin/jurnal*','admin/buku-besar*',
+'admin/laba-rugi*','admin/posisi-keuangan*','admin/arus-kas*'
+) ? 'menu-open' : '' }}">
+
+<a href="#" class="nav-link 
+{{ request()->is(
+'admin/jurnal*','admin/buku-besar*',
+'admin/laba-rugi*','admin/posisi-keuangan*','admin/arus-kas*'
+) ? 'active' : '' }}">
+
+<i class="fas fa-book nav-icon"></i>
+<p>
+Laporan Akuntansi
+<i class="right fas fa-angle-left"></i>
+</p>
 </a>
+<ul class="nav nav-treeview">
+
+    <li class="nav-item">
+        <a href="{{ url('/admin/jurnal') }}" 
+           class="nav-link {{ request()->is('admin/jurnal*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-book"></i>
+            <p>Jurnal Umum</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ url('/admin/buku-besar') }}" 
+           class="nav-link {{ request()->is('admin/buku-besar*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-book-open"></i>
+            <p>Buku Besar</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ url('/admin/laba-rugi') }}" 
+           class="nav-link {{ request()->is('admin/laba-rugi*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-chart-line"></i>
+            <p>Laba Rugi</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ url('/admin/posisi-keuangan') }}" 
+           class="nav-link {{ request()->is('admin/posisi-keuangan*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-scale-balanced"></i>
+            <p>Posisi Keuangan</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="{{ url('/admin/catatan-keuangan') }}" 
+           class="nav-link {{ request()->is('admin/catatan-keuangan*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-lines"></i>
+            <p>CALK</p>
+        </a>
+    </li>
+
+</ul>
 </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/buku-besar') }}" class="nav-link {{ request()->is('admin/buku-besar*') ? 'active' : '' }}">
-<i class="fas fa-archive nav-icon"></i>
-<p>Buku Besar</p>
-</a>
-</li>
+<!-- ================= LAPORAN TRANSAKSI ================= -->
+<li class="nav-item 
+{{ request()->is(
+'admin/laporan-penjualan*','admin/laporan-pembelian*',
+'admin/laporan-pajak*','admin/laporan-shift*','admin/laporan-hutang*',
+'admin/laporan-piutang*'
+) ? 'menu-open' : '' }}">
 
-<li class="nav-item">
-<a href="{{ url('/admin/laba-rugi') }}" 
-class="nav-link {{ request()->is('admin/laba-rugi*') ? 'active' : '' }}">
-<i class="fas fa-chart-line nav-icon"></i>
-<p>Laba Rugi</p>
-</a>
-</li>
+<a href="#" class="nav-link 
+{{ request()->is(
+'admin/laporan-penjualan*','admin/laporan-pembelian*',
+'admin/laporan-pajak*','admin/laporan-shift*','admin/laporan-hutang*',
+'admin/laporan-piutang*'
+) ? 'active' : '' }}">
 
-<li class="nav-item">
-<a href="{{ url('/admin/posisi-keuangan') }}" 
-class="nav-link {{ request()->is('admin/posisi-keuangan*') ? 'active' : '' }}">
-<i class="fas fa-balance-scale nav-icon"></i>
-<p>Posisi Keuangan</p>
+<i class="fas fa-receipt nav-icon"></i>
+<p>
+Laporan Transaksi
+<i class="right fas fa-angle-left"></i>
+</p>
 </a>
-</li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/arus-kas') }}" 
-class="nav-link {{ request()->is('admin/arus-kas*') ? 'active' : '' }}">
-<i class="fas fa-coins nav-icon"></i>
-<p>Arus Kas</p>
-</a>
-</li>
+<ul class="nav nav-treeview">
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-penjualan') }}" 
-class="nav-link {{ request()->is('admin/laporan-penjualan*') ? 'active' : '' }}">
-<i class="fas fa-shopping-cart nav-icon"></i>
-<p>Laporan Penjualan</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-penjualan') }}" 
+           class="nav-link {{ request()->is('admin/laporan-penjualan*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-cart-shopping"></i>
+            <p>Laporan Penjualan</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-pembelian') }}" 
-class="nav-link {{ request()->is('admin/laporan-pembelian*') ? 'active' : '' }}">
-<i class="fas fa-truck-loading nav-icon"></i>
-<p>Laporan Pembelian</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-pembelian') }}" 
+           class="nav-link {{ request()->is('admin/laporan-pembelian*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-truck"></i>
+            <p>Laporan Pembelian</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-pajak') }}" 
-class="nav-link {{ request()->is('admin/laporan-pajak*') ? 'active' : '' }}">
-<i class="fas fa-file-invoice-dollar nav-icon"></i>
-<p>Laporan Pajak</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-pajak') }}" 
+           class="nav-link {{ request()->is('admin/laporan-pajak*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-invoice"></i>
+            <p>Laporan Pajak</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-shift') }}" 
-class="nav-link {{ request()->is('admin/laporan-shift*') ? 'active' : '' }}">
-<i class="fas fa-user-clock nav-icon"></i>
-<p>Laporan Shift</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-shift') }}" 
+           class="nav-link {{ request()->is('admin/laporan-shift*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-user-clock"></i>
+            <p>Laporan Shift</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-stok') }}" 
-class="nav-link {{ request()->is('admin/laporan-stok*') ? 'active' : '' }}">
-<i class="fas fa-boxes nav-icon"></i>
-<p>Laporan Stok</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-hutang') }}" 
+           class="nav-link {{ request()->is('admin/laporan-hutang*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-hand-holding-dollar"></i>
+            <p>Laporan Hutang</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-hutang') }}" 
-class="nav-link {{ request()->is('admin/laporan-hutang*') ? 'active' : '' }}">
-<i class="fas fa-arrow-down nav-icon"></i>
-<p>Laporan Hutang</p>
-</a>
-</li>
+    <li class="nav-item">
+        <a href="{{ url('/admin/laporan-piutang') }}" 
+           class="nav-link {{ request()->is('admin/laporan-piutang*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-money-bill-wave"></i>
+            <p>Laporan Piutang</p>
+        </a>
+    </li>
 
-<li class="nav-item">
-<a href="{{ url('/admin/laporan-piutang') }}" 
-class="nav-link {{ request()->is('admin/laporan-piutang*') ? 'active' : '' }}">
-<i class="fas fa-arrow-up nav-icon"></i>
-<p>Laporan Piutang</p>
-</a>
+</ul>
 </li>
 
 </ul>
@@ -473,6 +613,8 @@ Version 1.0.0
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <button class="offline-save-btn" onclick="simpanDataOfflineAdmin()">
 <i class="fas fa-cloud-download-alt mr-2"></i> Simpan Data Admin

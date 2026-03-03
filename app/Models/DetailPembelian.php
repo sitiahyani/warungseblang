@@ -17,6 +17,13 @@ protected $fillable = [
     'harga',
     'subtotal'
 ];
-
+public function bahan()
+{
+    return $this->belongsTo(
+        \App\Models\BahanBaku::class,
+        'id_bahan',
+        'id_bahan'
+    );
+}
 
 }

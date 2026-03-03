@@ -52,21 +52,30 @@ class StokBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $barang = Barang::findOrFail($id);
+    public function update(Request $request, $id)
+{
+    $barang = Barang::findOrFail($id);
 
-    $barang->stok = $request->stok;
+    $jumlah = (int) $request->jumlah;
+
+    if ($request->aksi == 'tambah') {
+        $barang->stok += $jumlah;
+    }
+
+    if ($request->aksi == 'kurang') {
+
+        if ($barang->stok < $jumlah) {
+            return back()->with('error','Stok tidak cukup!');
+        }
+
+        $barang->stok -= $jumlah;
+    }
+
+    $barang->keterangan = $request->keterangan;
     $barang->save();
 
     return back()->with('success','Stok berhasil diperbarui');
-    }
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+
 }

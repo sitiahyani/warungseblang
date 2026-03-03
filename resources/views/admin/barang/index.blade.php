@@ -20,8 +20,15 @@
     {{-- TABLE --}}
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
+            {{-- SEARCH --}}
+            <div class="mb-3">
+                <input type="text"
+                       id="searchStok"
+                       class="form-control"
+                       placeholder="Cari barang...">
+            </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table id="tableBarang" class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr>
                             <th>No</th>
@@ -411,24 +418,26 @@
         </div>
     </div>
 </div>
-{{-- ================================================= --}}
-
+{{-- ================================================= -}}
 {{-- SEARCH SCRIPT --}}
 <script>
-document.getElementById('searchBarang')
-    .addEventListener('keyup', function () {
-        let value = this.value.toLowerCase();
-        let rows = document.querySelectorAll('#tableBarang tbody tr');
+document.addEventListener("DOMContentLoaded", function () {
 
-        rows.forEach(row => {
-            row.style.display =
-                row.innerText.toLowerCase().includes(value)
-                    ? ''
-                    : 'none';
+    const searchInput = document.getElementById("searchStok");
+    const table = document.getElementById("tableBarang");
+    const rows = table.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("keyup", function () {
+        let keyword = this.value.toLowerCase();
+
+        rows.forEach(function(row) {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(keyword) ? "" : "none";
         });
     });
-</script>
 
+});
+</script>
 @endsection
 
 <div id="formResep" style="display:none;" class="col-12 mt-3">

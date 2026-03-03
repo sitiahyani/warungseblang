@@ -40,6 +40,14 @@ class Hutang extends Model
     {
         return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');
     }
+    public function pembayaran()
+{
+    return $this->hasMany(
+        PembayaranHutang::class,
+        'id_hutang',
+        'id_hutang'
+    );
+}
 
     /*
     |--------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h4>Jurnal Umum</h4>
+        <h4>Laporan Pembelian</h4>
     </div>
 
     <div class="card-body">
@@ -28,12 +28,12 @@
             </div>
 
             <div class="col-md-4 text-end">
-                <a href="{{ route('jurnal.excel', request()->all()) }}"
+                <a href="{{ route('laporan.pembelian.excel', request()->all()) }}"
                    class="btn btn-success">
                     Export Excel
                 </a>
 
-                <a href="{{ route('jurnal.pdf', request()->all()) }}"
+                <a href="{{ route('laporan.pembelian.pdf', request()->all()) }}"
                    class="btn btn-danger">
                     Cetak PDF
                 </a>
@@ -44,43 +44,36 @@
             <thead>
                 <tr>
                     <th>Tanggal</th>
-                    <th>Keterangan</th>
-                    <th>Akun</th>
-                    <th>Debit</th>
-                    <th>Kredit</th>
+                    <th>Supplier</th>
+                    <th>Bahan</th>
+                    <th>Qty</th>
+                    <th>Harga</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
 
-            @foreach($jurnals as $jurnal)
-                @foreach($jurnal->details as $detail)
+            @foreach($pembelians as $pembelian)
+                @foreach($pembelian->details as $detail)
                 <tr>
-                    <td>{{ $jurnal->tanggal }}</td>
-                    <td>{{ $jurnal->keterangan }}</td>
-                     <td>{{ $detail->akun->nama_akun ?? '-' }}</td>
-                    <td class="text-end">
-                        {{ number_format($detail->debit,0,',','.') }}
-                    </td>
-                    <td class="text-end">
-                        {{ number_format($detail->kredit,0,',','.') }}
-                    </td>
+                    <td>{{ $pembelian->tanggal }}</td>
+                    <td>{{ $pembelian->supplier->nama_supplier }}</td>
+                    <td>{{ $detail->bahan->nama_bahan }}</td>
+                    <td>{{ $detail->qty }}</td>
+                    <td>{{ number_format($detail->harga,0,',','.') }}</td>
+                    <td>{{ number_format($detail->subtotal,0,',','.') }}</td>
                 </tr>
                 @endforeach
             @endforeach
 
             </tbody>
 
-           <tfoot>
-            <tr>
-                <th colspan="3" class="text-end">TOTAL</th>
-                <th class="text-end">
-                    {{ number_format($totalDebit,0,',','.') }}
-                </th>
-                <th class="text-end">
-                    {{ number_format($totalKredit,0,',','.') }}
-                </th>
-            </tr>
-        </tfoot>
+            <tfoot>
+                <tr>
+                    <th colspan="5">TOTAL</th>
+                    <th>{{ number_format($total,0,',','.') }}</th>
+                </tr>
+            </tfoot>
         </table>
 
     </div>

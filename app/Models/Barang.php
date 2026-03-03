@@ -9,6 +9,9 @@ class Barang extends Model
     protected $table = 'barang';
     protected $primaryKey = 'id_barang';
     public $timestamps = false;
+    public $incrementing = true;
+protected $keyType = 'int';
+
 
 
     protected $fillable = [
@@ -34,4 +37,10 @@ class Barang extends Model
     {
         return $this->belongsTo(Tipe::class, 'id_tipe', 'id_tipe');
     }
+    public function detailPembelian()
+    {
+        return $this->hasMany(DetailPembelian::class, 'barang_id');
+    }
+
+
 }

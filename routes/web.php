@@ -14,8 +14,10 @@ use App\Http\Controllers\Admin\BahanBakuController;
 use App\Http\Controllers\Admin\JurnalController;
 use App\Http\Controllers\Admin\StokBarangController;
 use App\Http\Controllers\Admin\KodeAkunController;
+use App\Http\Controllers\Admin\LaporanPembelianController;
+use App\Http\Controllers\Admin\LaporanHutangController;
 use App\Http\Controllers\Admin\BiayaPengeluaranController;
-
+use App\Http\Controllers\Kasir\PembayaranHutangController;
 /*
 |--------------------------------------------------------------------------
 | HALAMAN AWAL → LOGIN
@@ -65,27 +67,24 @@ Route::middleware(['auth','role:admin'])
         Route::resource('barang', BarangController::class)
             ->except(['show']);
 
-       Route::patch('/barang/{id}/status',
-    [BarangController::class,'updateStatus'])
-    ->name('barang.status');
-
-Route::get('/barang/{id}/hpp', [BarangController::class, 'hpp'])->name('barang.hpp');
-Route::post('/barang/{id}/hpp', [BarangController::class, 'simpanHpp'])->name('barang.simpanHpp');
-Route::get('/barang/{id}/resep', [BarangController::class, 'resep'])
-    ->name('barang.resep');
-
-Route::post('/barang/{id}/resep', [BarangController::class, 'simpanResep'])
-    ->name('barang.simpanResep');
-//stok barang
-Route::get('/stok-barang', [StokBarangController::class,'index'])
-    ->name('stok.index');
-
-Route::put('/stok-barang/{id}', [StokBarangController::class,'update'])
-    ->name('stok.update');
+        Route::patch('/barang/{id}/status',
+        [BarangController::class,'updateStatus'])
+        ->name('barang.status');
+        Route::get('/barang/{id}/hpp', [BarangController::class, 'hpp'])->name('barang.hpp');
+        Route::post('/barang/{id}/hpp', [BarangController::class, 'simpanHpp'])->name('barang.simpanHpp');
+        Route::get('/barang/{id}/resep', [BarangController::class, 'resep'])
+            ->name('barang.resep');
+        Route::post('/barang/{id}/resep', [BarangController::class, 'simpanResep'])
+            ->name('barang.simpanResep');
+        //stok barang
+        Route::get('/stok-barang', [StokBarangController::class,'index'])
+            ->name('stok.index');
+        Route::put('/stok-barang/{id}', [StokBarangController::class,'update'])
+            ->name('stok.update');
 
 
     //supplier
-   Route::get('/supplier', [SupplierController::class,'index'])
+    Route::get('/supplier', [SupplierController::class,'index'])
         ->name('supplier.index');
 
     Route::post('/supplier/store', [SupplierController::class,'store'])
@@ -116,11 +115,18 @@ Route::put('/stok-barang/{id}', [StokBarangController::class,'update'])
 
     
     //kode akun
-    Route::get('/kode-akun', 
-        [KodeAkunController::class,'index'])
-        ->name('kode.akun');
+    Route::get('kode-akun', [KodeAkunController::class, 'index'])
+        ->name('kode-akun.index');
 
+    Route::post('kode-akun', [KodeAkunController::class, 'store'])
+        ->name('kode-akun.store');
 
+    Route::put('kode-akun/{id}', [KodeAkunController::class, 'update'])
+        ->name('kode-akun.update');
+
+    Route::delete('kode-akun/{id}', [KodeAkunController::class, 'destroy'])
+        ->name('kode-akun.destroy');
+        
     //biaya pengeluaran
     // INDEX + SEARCH
         Route::get('/biaya-pengeluaran',
@@ -150,6 +156,33 @@ Route::put('/stok-barang/{id}', [StokBarangController::class,'update'])
     Route::get('/jurnal', [JurnalController::class, 'index'])->name('jurnal.index');
     Route::get('/jurnal/excel', [JurnalController::class, 'exportExcel'])->name('jurnal.excel');
     Route::get('/jurnal/pdf', [JurnalController::class, 'exportPdf'])->name('jurnal.pdf');
+    
+    //laporan pembelian
+       Route::get('/laporan-pembelian',
+        [LaporanPembelianController::class,'index']
+    )->name('laporan.pembelian');
+
+    Route::get('/laporan-pembelian/excel',
+        [LaporanPembelianController::class,'exportExcel']
+    )->name('laporan.pembelian.excel');
+
+    Route::get('/laporan-pembelian/pdf',
+        [LaporanPembelianController::class,'exportPdf']
+    )->name('laporan.pembelian.pdf');
+    
+    //hutang
+      Route::get('/laporan-hutang',
+        [LaporanHutangController::class,'index']
+    )->name('laporan.hutang');
+
+    Route::get('/laporan-hutang/pdf',
+        [LaporanHutangController::class,'exportPdf']
+    )->name('laporan.hutang.pdf');
+
+    Route::get('/laporan-hutang/excel',
+        [LaporanHutangController::class,'exportExcel']
+    )->name('laporan.hutang.excel');
+
 });
 
 
@@ -163,7 +196,7 @@ Route::prefix('kasir')->group(function () {
     Route::get('/', function () {
         return view('kasir.dashboard');
     })->name('kasir.dashboard');
-
+    //pembelian
   Route::get('/pembelian',
         [PembelianController::class,'index']
     )->name('kasir.pembelian');
@@ -171,7 +204,14 @@ Route::prefix('kasir')->group(function () {
     Route::post('/pembelian/store',
         [PembelianController::class,'store']
     )->name('kasir.pembelian.store');
+    //pembayaran hutang
+     Route::get('/hutang',
+            [PembayaranHutangController::class,'index']
+        )->name('kasir.hutang');
 
+        Route::post('/hutang/bayar',
+            [PembayaranHutangController::class,'bayar']
+        )->name('kasir.hutang.bayar');
 });
 
 /*

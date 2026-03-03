@@ -28,4 +28,5 @@ class DetailJurnal extends Model
             'id_jurnal'
         );
     }
+    
 }

@@ -18,5 +18,21 @@ protected $fillable = [
     'status'
 ];
 
+public function supplier()
+{
+    return $this->belongsTo(
+        \App\Models\Supplier::class,
+        'id_supplier',
+        'id_supplier'
+    );
+}
 
+public function details()
+{
+    return $this->hasMany(
+        \App\Models\DetailPembelian::class,
+        'id_pembelian',
+        'id_pembelian'
+    );
+}
 }

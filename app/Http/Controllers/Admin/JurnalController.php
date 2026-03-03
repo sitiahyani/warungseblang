@@ -69,7 +69,7 @@ public function exportPdf(Request $request)
         compact('jurnals','totalDebit','totalKredit')
     )->setPaper('a4','portrait');
 
-    return $pdf->download('jurnal-umum.pdf');
+    return $pdf->stream('jurnal-umum.pdf');
 }
 public function exportExcel(Request $request)
 {
