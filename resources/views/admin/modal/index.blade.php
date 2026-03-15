@@ -78,10 +78,10 @@
                     <td>Rp {{ number_format($m->jumlah,0,',','.') }}</td>
                     <td>{{ $m->keterangan }}</td>
                     <td>
-                        <button class="btn btn-warning btn-sm"
-                            data-toggle="modal"
-                            data-target="#edit{{ $m->id_modal }}">
-                            Edit
+                         <button class="btn btn-sm btn-outline-warning mr-1"
+                                    data-toggle="modal"
+                                    data-target="#edit{{ $m->id_modal }}">
+                                <i class="fas fa-pen"></i>
                         </button>
                     </td>
                 </tr>

@@ -5,7 +5,7 @@
 
     {{-- HEADER --}}
     <div class="d-flex justify-content-between mb-3">
-        <h4 class="font-weight-bold">Biaya Pengeluaran</h4>
+          <h4 class="font-weight-bold mb-1" style="font-size: 25px;">Data Biaya Pengeluaran</h4>
 
         <button class="btn btn-primary"
                 data-toggle="modal"

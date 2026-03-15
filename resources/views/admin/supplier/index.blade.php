@@ -6,7 +6,7 @@
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h4 class="mb-1 font-weight-bold">Data Supplier</h4>
+             <h4 class="font-weight-bold mb-1" style="font-size: 25px;">Data Supplier</h4>
             <small class="text-muted">Manajemen supplier bahan baku</small>
         </div>
 

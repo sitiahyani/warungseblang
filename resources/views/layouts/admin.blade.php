@@ -616,11 +616,80 @@ Version 1.0.0
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<button class="offline-save-btn" onclick="simpanDataOfflineAdmin()">
-<i class="fas fa-cloud-download-alt mr-2"></i> Simpan Data Admin
+<button class="offline-save-btn" onclick="manualSync()">
+<i class="fas fa-sync mr-2"></i> Sinkronkan Data
 </button>
 
 @stack('scripts')
 
+<script>
+/* ===============================
+   REGISTER SERVICE WORKER
+================================ */
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("SW Registered"))
+        .catch(err => console.log("SW Error:", err));
+    });
+}
+
+/* ===============================
+   AUTO SYNC SAAT ONLINE
+================================ */
+window.addEventListener("online", () => {
+    navigator.serviceWorker.ready.then((sw) => {
+        if ("sync" in sw) {
+            sw.sync.register("sync-transactions");
+        }
+    });
+});
+
+function manualSync() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.ready.then((sw) => {
+            if ("sync" in sw) {
+                sw.sync.register("sync-transactions");
+                alert("Sinkronisasi dimulai");
+            } else {
+                alert("Browser tidak mendukung background sync");
+            }
+        });
+    }
+}
+</script>
+<script>
+
+if("serviceWorker" in navigator){
+
+window.addEventListener("load",()=>{
+
+navigator.serviceWorker.register("/service-worker.js")
+.then(()=>console.log("SW aktif"))
+.catch(err=>console.log("SW gagal",err));
+
+});
+
+}
+
+</script>
+<script>
+
+window.addEventListener("online",()=>{
+
+navigator.serviceWorker.ready.then(sw=>{
+
+if("sync" in sw){
+
+sw.sync.register("sync-transactions");
+
+}
+
+});
+
+});
+
+</script>
+<script src="{{ asset('js/offline-pos.js') }}"></script>
 </body>
 </html>

@@ -5,9 +5,9 @@
 
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-1 font-weight-bold">Data Bahan Baku</h4>
-            <small class="text-muted">Manajemen bahan baku produksi</small>
+          <div>
+          <h4 class="font-weight-bold mb-1" style="font-size: 25px;">Data Bahan Baku</h4>
+            <small class="text-muted">Manajemen bahan baku Warung Seblang</small>
         </div>
 
         <button class="btn btn-primary shadow-sm"

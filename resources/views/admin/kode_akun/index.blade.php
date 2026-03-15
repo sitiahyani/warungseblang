@@ -5,7 +5,7 @@
 
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="font-weight-bold">Kode Akun</h4>
+        <h4 class="font-weight-bold mb-1" style="font-size: 25px;">Data Kode Akun</h4>
 
         <button class="btn btn-primary"
                 data-toggle="modal"
