@@ -1,17 +1,19 @@
-// =============================
-// DATABASE
-// =============================
 
 let db;
+const DB_NAME = "warungseblangPOS";
 
-const request = indexedDB.open("warungseblangPOS", 1);
+/* ================= OPEN DB ================= */
+const request = indexedDB.open(DB_NAME, 1);
+
 request.onupgradeneeded = function (e) {
     db = e.target.result;
 
-    const store = db.createObjectStore("transactions", {
-        keyPath: "id",
-        autoIncrement: true,
-    });
+    if (!db.objectStoreNames.contains("transactions")) {
+        db.createObjectStore("transactions", {
+            keyPath: "id",
+            autoIncrement: true,
+        });
+    }
 };
 
 request.onsuccess = function (e) {
@@ -19,81 +21,51 @@ request.onsuccess = function (e) {
     console.log("IndexedDB siap");
 };
 
-request.onerror = function () {
-    console.log("IndexedDB error");
-};
-
-// =============================
-// SIMPAN TRANSAKSI OFFLINE
-// =============================
-
+/* ================= SAVE OFFLINE ================= */
 function saveOfflineTransaction(data) {
-    const tx = db.transaction("transactions", "readwrite");
-    const store = tx.objectStore("transactions");
-    store.add(data);
-    console.log("Transaksi disimpan offline");
-}
-
-// =============================
-// AMBIL DATA OFFLINE
-// =============================
-
-function getOfflineTransactions() {
-    return new Promise((resolve) => {
-        const tx = db.transaction("transactions", "readonly");
-        const store = tx.objectStore("transactions");
-        const request = store.getAll();
-        request.onsuccess = function () {
-            resolve(request.result);
-        };
-    });
-}
-
-// =============================
-// HAPUS DATA SETELAH SYNC
-// =============================
-
-function clearOfflineTransactions() {
-    const tx = db.transaction("transactions", "readwrite");
-    const store = tx.objectStore("transactions");
-    store.clear();
-}
-
-// =============================
-// SYNC KE SERVER
-// =============================
-
-async function syncTransactions() {
-    const data = await getOfflineTransactions();
-
-    if (data.length === 0) return;
-
-    console.log("Sync transaksi offline");
-
-    for (let trx of data) {
-        await fetch("/kasir/penjualan/simpan", {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
-
-            body: JSON.stringify(trx),
-        });
+    if (!db) {
+        alert("Database belum siap");
+        return;
     }
 
-    clearOfflineTransactions();
+    data.csrf_token = document.querySelector('meta[name="csrf-token"]').content;
+    data.created_at = new Date().toISOString();
+
+    const tx = db.transaction("transactions", "readwrite");
+    const store = tx.objectStore("transactions");
+
+    store.add(data);
+
+    tx.oncomplete = () => {
+        alert("Internet offline, transaksi disimpan ke IndexedDB");
+    };
 }
 
-// =============================
-// AUTO SYNC SAAT ONLINE
-// =============================
+/* ================= HANDLE SUBMIT FORM ================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("form-transaksi");
 
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+        if (!navigator.onLine) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            saveOfflineTransaction(data);
+            form.reset();
+            return false;
+        }
+    });
+});
+
+/* ================= AUTO SYNC ================= */
 window.addEventListener("online", () => {
-    console.log("Internet kembali");
-
-    syncTransactions();
+    navigator.serviceWorker.ready.then((sw) => {
+        if (sw.sync) {
+            sw.sync.register("sync-transactions");
+        }
+    });
 });

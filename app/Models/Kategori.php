@@ -10,10 +10,17 @@ class Kategori extends Model
     protected $table = 'kategori';
     protected $primaryKey = 'id_kategori';
 
+    public $timestamps = false;
+    
     protected $fillable = ['nama_kategori'];
 
     public function barang()
     {
         return $this->hasMany(Barang::class, 'id_kategori', 'id_kategori');
+    }
+
+    public function layanan()
+    {
+        return $this->hasMany(Layanan::class,'id_kategori');
     }
 }

@@ -1,21 +1,31 @@
 @extends('layouts.admin')
 
+@section('page_title','Kategori')
+@section('page_subtitle','Manajemen Kategori')
+
 @section('content')
 <div class="container-fluid">
-
-    {{-- HEADER --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
-        <div>
-            <h4 class="mb-1 font-weight-bold">Data Kategori</h4>
-            <small class="text-muted">Manajemen kategori barang</small>
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
+    @endif
 
-        <button class="btn btn-primary mt-3 mt-md-0 shadow-sm"
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    {{-- HEADER --}}
+    <div class="d-flex justify-content-end mb-4">
+
+        <button class="btn btn-primary shadow-sm"
                 data-toggle="modal"
                 data-target="#modalTambah"
                 style="border-radius:10px;">
             <i class="fas fa-plus mr-2"></i> Tambah Kategori
         </button>
+
     </div>
 
     {{-- CARD TABLE --}}
@@ -23,8 +33,8 @@
         <div class="card-body p-0">
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table class="table table-hover mb-0">
+                    <thead class="thead-light">
                         <tr>
                             <th width="60">No</th>
                             <th>Nama Kategori</th>
@@ -39,9 +49,21 @@
                                 {{ $item->nama_kategori }}
                             </td>
                             <td class="text-center">
-                                <span class="badge badge-secondary px-3 py-2">
-                                    Tidak ada aksi
-                                </span>
+                                <button class="btn btn-sm btn-outline-warning mr-1"
+                                    data-toggle="modal"
+                                    data-target="#modalEdit{{ $item->id_kategori }}">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <form action="{{ route('kategori.destroy',$item->id_kategori) }}"
+                                    method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Yakin hapus kategori ini?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @empty
@@ -107,4 +129,44 @@
         </div>
     </div>
 </div>
+
+{{-- MODAL EDIT --}}
+@foreach($kategori as $item)
+<div class="modal fade" id="modalEdit{{ $item->id_kategori }}">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form action="{{ route('kategori.update',$item->id_kategori) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold">Edit Kategori</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nama Kategori</label>
+                        <input type="text"
+                        name="nama_kategori"
+                        value="{{ $item->nama_kategori }}"
+                        class="form-control"
+                        required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection

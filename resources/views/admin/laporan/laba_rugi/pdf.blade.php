@@ -1,98 +1,169 @@
-@extends('layouts.admin')
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        font-family: serif;
+        font-size: 12px;
+    }
 
-@section('content')
+    .container {
+        border: 1px solid black;
+        padding: 10px;
+        width: 90%;
+        margin: auto;
+    }
 
-<div class="card">
-<div class="card-body">
+    .header-box {
+        border: 1px solid black;
+        padding: 8px;
+        margin-bottom: 15px;
+        background-color: #eaeaea;
+    }
 
-<center>
-<h4><b>WARUNG SEBLANG</b></h4>
-<h5>LAPORAN LABA RUGI</h5>
-<p>Untuk Tahun yang Berakhir 31 Desember {{ date('Y') }}</p>
-</center>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-<table class="table table-bordered">
+    td {
+        padding: 4px;
+    }
 
-<thead>
-<tr>
-<th width="60%">Keterangan</th>
-<th>Catatan</th>
-<th>20{{ date('y') }}</th>
-</tr>
-</thead>
+    .right {
+        text-align: right;
+    }
 
-<tbody>
+    .center {
+        text-align: center;
+    }
 
-<tr>
-<td colspan="3"><b>PENDAPATAN</b></td>
-</tr>
+    .bold {
+        font-weight: bold;
+    }
 
-<tr>
-<td>Pendapatan usaha</td>
-<td>10</td>
-<td>Rp {{ number_format($pendapatan_usaha,0,',','.') }}</td>
-</tr>
+    .italic {
+        font-style: italic;
+    }
 
-<tr>
-<td>Pendapatan lain-lain</td>
-<td></td>
-<td>Rp {{ number_format($pendapatan_lain,0,',','.') }}</td>
-</tr>
+    .line {
+        border-top: 1px solid black;
+    }
 
-<tr>
-<td><b>JUMLAH PENDAPATAN</b></td>
-<td></td>
-<td><b>Rp {{ number_format($total_pendapatan,0,',','.') }}</b></td>
-</tr>
+    .double {
+        border-top: 2px solid black;
+    }
 
+    .spasi {
+        height: 10px;
+    }
+</style>
+</head>
 
-<tr>
-<td colspan="3"><b>BEBAN</b></td>
-</tr>
+<body>
 
-<tr>
-<td>Beban usaha</td>
-<td></td>
-<td>Rp {{ number_format($beban_usaha,0,',','.') }}</td>
-</tr>
+@php
+function rupiah($n){
+    if ($n < 0) return '(' . number_format(abs($n),0,',','.') . ')';
+    return number_format($n,0,',','.');
+}
+@endphp
 
-<tr>
-<td>Beban lain-lain</td>
-<td>11</td>
-<td>Rp {{ number_format($beban_lain,0,',','.') }}</td>
-</tr>
+<div class="container">
 
-<tr>
-<td><b>JUMLAH BEBAN</b></td>
-<td></td>
-<td><b>Rp {{ number_format($total_beban,0,',','.') }}</b></td>
-</tr>
+    <div class="header-box">
+        <div class="bold">ENTITAS</div>
+        <div class="bold">LAPORAN LABA RUGI</div>
+        <div class="bold">UNTUK TAHUN YANG BERAKHIR 31 DESEMBER {{ $tahun }} DAN {{ $tahun_lalu }}</div>
+    </div>
 
+    <table>
 
-<tr>
-<td><b>LABA (RUGI) SEBELUM PAJAK</b></td>
-<td></td>
-<td><b>Rp {{ number_format($laba_sebelum_pajak,0,',','.') }}</b></td>
-</tr>
+        <!-- HEADER -->
+        <tr>
+            <td class="bold">PENDAPATAN</td>
+            <td class="center bold">Catatan</td>
+            <td class="right bold">{{ $tahun }}</td>
+            <td class="right bold">{{ $tahun_lalu }}</td>
+        </tr>
 
-<tr>
-<td>Beban pajak penghasilan</td>
-<td>12</td>
-<td>Rp {{ number_format($pajak,0,',','.') }}</td>
-</tr>
+        <!-- PENDAPATAN -->
+        <tr>
+            <td>Pendapatan usaha</td>
+            <td class="center">10</td>
+            <td class="right">{{ rupiah($pendapatan) }}</td>
+            <td class="right">{{ rupiah($pendapatan_lalu) }}</td>
+        </tr>
 
+        <tr>
+            <td>Pendapatan lain-lain</td>
+            <td></td>
+            <td class="right">0</td>
+            <td class="right">0</td>
+        </tr>
 
-<tr>
-<td><b>LABA (RUGI) SETELAH PAJAK</b></td>
-<td></td>
-<td><b>Rp {{ number_format($laba_setelah_pajak,0,',','.') }}</b></td>
-</tr>
+        <tr class="line italic bold">
+            <td>JUMLAH PENDAPATAN</td>
+            <td></td>
+            <td class="right">{{ rupiah($pendapatan) }}</td>
+            <td class="right">{{ rupiah($pendapatan_lalu) }}</td>
+        </tr>
 
-</tbody>
+        <tr class="spasi"><td colspan="4"></td></tr>
 
-</table>
+        <!-- BEBAN -->
+        <tr>
+            <td class="bold">BEBAN</td>
+        </tr>
+
+        <tr>
+            <td>Beban usaha</td>
+            <td></td>
+            <td class="right">{{ rupiah($beban) }}</td>
+            <td class="right">{{ rupiah($beban_lalu) }}</td>
+        </tr>
+
+        <tr>
+            <td>Beban lain-lain</td>
+            <td class="center">11</td>
+            <td class="right">0</td>
+            <td class="right">0</td>
+        </tr>
+
+        <tr class="line italic bold">
+            <td>JUMLAH BEBAN</td>
+            <td></td>
+            <td class="right">{{ rupiah($beban) }}</td>
+            <td class="right">{{ rupiah($beban_lalu) }}</td>
+        </tr>
+
+        <tr class="spasi"><td colspan="4"></td></tr>
+
+        <!-- LABA -->
+        <tr>
+            <td class="bold">LABA (RUGI) SEBELUM PAJAK PENGHASILAN</td>
+            <td></td>
+            <td class="right">{{ rupiah($laba_sebelum_pajak) }}</td>
+            <td class="right">{{ rupiah($laba_sebelum_pajak_lalu) }}</td>
+        </tr>
+
+        <tr>
+            <td>Beban pajak penghasilan</td>
+            <td class="center">12</td>
+            <td class="right">{{ rupiah($pajak) }}</td>
+            <td class="right">{{ rupiah($pajak_lalu) }}</td>
+        </tr>
+
+        <tr class="double italic bold">
+            <td>LABA (RUGI) SETELAH PAJAK PENGHASILAN</td>
+            <td></td>
+            <td class="right">{{ rupiah($laba_bersih) }}</td>
+            <td class="right">{{ rupiah($laba_bersih_lalu) }}</td>
+        </tr>
+
+    </table>
 
 </div>
-</div>
 
-@endsection
+</body>
+</html>

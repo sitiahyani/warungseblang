@@ -47,13 +47,13 @@ body{
 }
 
 .brand-link{
-    background:#ffffff !important;
-    border-bottom:1px solid #e5e7eb;
+    background:#1e40af;
+    border-bottom:1px solid rgba(255,255,255,.15);
 }
 
 .brand-text{
     font-weight:700;
-    color:#0f172a;
+    color:#ffffff;
 }
 
 .nav-sidebar .nav-link{
@@ -71,7 +71,7 @@ body{
 }
 
 .nav-sidebar .nav-link.active{
-    background:#2563eb !important;
+    background:#1e40af !important;
     color:#ffffff !important;
 }
 
@@ -201,7 +201,7 @@ class="nav-link {{ request()->routeIs('kasir.cashdrawer') ? 'active' : '' }}">
 </li>
 
 <li class="nav-item">
-<a href="{{ route('riwayat') }}"
+<a href="{{ route('kasir.riwayat') }}"
 class="nav-link {{ request()->routeIs('kasir.riwayat') ? 'active' : '' }}">
 <i class="fas fa-history nav-icon"></i>
 <p>Riwayat</p>
@@ -230,7 +230,7 @@ class="nav-link {{ request()->routeIs('penjualan.homestay') ? 'active' : '' }}">
 <a href="{{ route('penjualan.wedding') }}"
 class="nav-link {{ request()->routeIs('penjualan.wedding') ? 'active' : '' }}">
 <i class="fas fa-ring nav-icon"></i>
-<p>Wedding</p>
+<p>Aula / Wedding</p>
 </a>
 </li>
 
@@ -251,6 +251,15 @@ class="nav-link {{ request()->routeIs('kasir.hutang') ? 'active' : '' }}">
 <p>Pembayaran Hutang</p>
 </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('hutang_pelanggan') }}"
+       class="nav-link {{ request()->routeIs('hutang_pelanggan') ? 'active' : '' }}">
+        <i class="fas fa-money-bill-wave nav-icon"></i>
+        <p>Pembayaran Piutang</p>
+    </a>
+</li>
+
 
 </ul>
 </nav>
@@ -288,29 +297,29 @@ class="nav-link {{ request()->routeIs('kasir.hutang') ? 'active' : '' }}">
    STATUS ONLINE OFFLINE
 ================================ */
 
-function updateInternetStatus(){
 
-let status=document.getElementById("internet-status")
+<script>
+async function updateInternetStatus() {
+    let status = document.getElementById("internet-status");
 
-if(navigator.onLine){
+    try {
+        await fetch("/offline.html", {
+            method: "HEAD",
+            cache: "no-store",
+        });
 
-status.innerHTML="🟢 Online"
-status.classList.remove("status-offline")
-status.classList.add("status-online")
-
-}else{
-
-status.innerHTML="🔴 Offline"
-status.classList.remove("status-online")
-status.classList.add("status-offline")
-
+        status.innerHTML = "🟢 Online";
+        status.classList.remove("status-offline");
+        status.classList.add("status-online");
+    } catch {
+        status.innerHTML = "🔴 Offline";
+        status.classList.remove("status-online");
+        status.classList.add("status-offline");
+    }
 }
 
-}
-
-window.addEventListener("online",updateInternetStatus)
-window.addEventListener("offline",updateInternetStatus)
-updateInternetStatus()
+setInterval(updateInternetStatus, 3000);
+updateInternetStatus();
 
 
 /* ===============================
@@ -376,5 +385,15 @@ alert("Browser tidak mendukung background sync")
 
 <script src="{{ asset('js/offline-pos.js') }}"></script>
 
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("/service-worker.js")
+            .then(() => console.log("SW aktif"))
+            .catch((err) => console.log("SW gagal", err));
+    });
+}
+</script>
 </body>
 </html>

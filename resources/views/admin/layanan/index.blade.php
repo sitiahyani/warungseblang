@@ -6,11 +6,15 @@
 @section('content')
 
 <div class="container-fluid">
-
-    {{-- ALERT --}}
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
     @endif
 
@@ -41,7 +45,8 @@
                         <tr>
                             <th>No</th>
                             <th>Kode</th>
-                            <th>Nama Layanan</th>
+                            <th>Gambar</th>
+                            <th>Layanan</th>
                             <th>Kategori</th>
                             <th>Tipe</th>
                             <th>Harga</th>
@@ -56,8 +61,19 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $l->kode_layanan }}</td>
+                                <td>
+                                    @if($l->gambar)
+                                        <img 
+                                        src="{{ asset('storage/layanan/'.$l->gambar) }}" 
+                                        width="50"
+                                        height="50"
+                                        style="object-fit:cover;border-radius:6px;">
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                                 <td>{{ $l->nama_layanan }}</td>
-                                <td>{{ $l->kategori->nama_kategori ?? '-' }}</td>
+                                <td>{{ $l->kategoriRel->nama_kategori ?? '-' }}</td>
                                 <td>{{ $l->tipe->nama_tipe ?? '-' }}</td>
                                 <td>
                                     Rp {{ number_format($l->harga,0,',','.') }}
@@ -115,8 +131,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form method="POST" action="{{ route('layanan.store') }}">
-                @csrf
+            <form method="POST" action="{{ route('layanan.store') }}" enctype="multipart/form-data">
+            @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Layanan</h5>
                     <button type="button" class="close" data-dismiss="modal"> &times; </button>
@@ -126,6 +142,11 @@
                     <div class="form-group">
                         <label>Kode Layanan</label>
                         <input type="text" name="kode_layanan" class="form-control" required >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="gambar" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -192,7 +213,7 @@
 <div class="modal fade" id="modalEdit">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" id="formEdit">
+            <form method="POST" id="formEdit" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -205,6 +226,11 @@
                     <div class="form-group">
                         <label>Kode</label>
                         <input type="text" name="kode_layanan" id="edit_kode" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="gambar" class="form-control">
                     </div>
 
                     <div class="form-group">
