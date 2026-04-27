@@ -9,6 +9,8 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'id_user';
     public $timestamps = false;
+public $incrementing = true;
+protected $keyType = 'int';
 
     protected $fillable = [
         'nama',
@@ -21,9 +23,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
-    public function karyawan()
-{
-    return $this->belongsTo(Karyawan::class);
-}
 
+    public function getAuthIdentifierName()
+    {
+        return 'id_user';
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class);
+    }
 }

@@ -2,46 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Shift extends Model
 {
+    use HasFactory;
+
     protected $table = 'shift';
     protected $primaryKey = 'id_shift';
+
     public $timestamps = false;
 
     protected $fillable = [
-        'id_karyawan',
         'kode',
         'nama_shift',
+        'id_karyawan', // 🔥 WAJIB ADA (ini penyebab error kamu tadi)
         'waktu_mulai',
         'waktu_selesai',
-        'status',
         'jumlah',
+        'status',
         'keterangan'
     ];
 
+    // 🔗 RELASI KE KARYAWAN
     public function karyawan()
     {
-        return $this->belongsTo(Karyawan::class,'id_karyawan','id_karyawan');
+        return $this->belongsTo(Karyawan::class, 'id_karyawan', 'id_karyawan');
     }
 
-    public function getStatusAktifAttribute()
+    // 🔗 RELASI CASH DRAWER
+    public function cashDrawers()
     {
-        $now = Carbon::now()->format('H:i:s');
-
-        if ($now >= $this->waktu_mulai && $now <= $this->waktu_selesai) {
-            return 'buka';
-        }
-
-        return 'tutup';
-    }
-
-    public function getWaktuAttribute()
-    {
-        return date('H.i', strtotime($this->waktu_mulai)) .
-               ' - ' .
-               date('H.i', strtotime($this->waktu_selesai));
+        return $this->hasMany(CashDrawer::class, 'id_shift', 'id_shift');
     }
 }
