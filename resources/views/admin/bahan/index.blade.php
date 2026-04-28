@@ -54,7 +54,7 @@
                             <td>
                                 Rp {{ number_format($item->harga_per_satuan ?? 0,0,',','.') }}
                             </td>
-                            <td>{{ $item->stok }}</td>
+                           <td>{{ number_format($item->stok, 0, ',', '.') }}</td>
                             <td class="text-center">
 
                                 {{-- EDIT --}}
@@ -126,31 +126,31 @@
                                required>
                     </div>
 
-                    <div class="form-group">
+                   <div class="form-group">
                         <label>Satuan</label>
                         <input type="text"
-                               name="satuan"
-                               class="form-control"
-                               value="{{ $item->satuan }}"
-                               required>
+                            name="satuan"
+                            class="form-control"
+                            value="{{ $item->satuan }}"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Harga per Satuan</label>
                         <input type="number"
-                               name="harga_per_satuan"
-                               class="form-control"
-                               value="{{ $item->harga_per_satuan }}"
-                               required>
+                            name="harga_per_satuan"
+                            class="form-control"
+                            value="{{ +$item->harga_per_satuan }}"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label>Stok</label>
                         <input type="number"
-                               name="stok"
-                               class="form-control"
-                               value="{{ $item->stok }}"
-                               required>
+                            name="stok"
+                            class="form-control"
+                            value="{{ +$item->stok }}"
+                            required>
                     </div>
 
                 </div>

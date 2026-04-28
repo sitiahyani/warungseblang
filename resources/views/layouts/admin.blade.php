@@ -49,21 +49,21 @@ body{
 }
 
 .custom-brand{
-    background:#ffffff;
-    border-bottom:1px solid #e5e7eb;
-    padding:20px 10px 18px;
+    background:#1e40af;
+    border-bottom:1px solid rgba(255,255,255,.15);
 }
+
 
 .brand-title{
     font-size:1.05rem;
     font-weight:700;
     letter-spacing:.5px;
-    color:#0f172a;
+    color:#ffffff;
 }
 
 .brand-subtitle{
     font-size:.7rem;
-    color:#64748b;
+    color:#cbd5f5;
     letter-spacing:1px;
     margin-top:4px;
 }
@@ -83,7 +83,7 @@ body{
 }
 
 .nav-sidebar .nav-link.active{
-    background:#2563eb !important;
+    background:#1e40af !important;
     color:#ffffff !important;
 }
 
@@ -250,7 +250,7 @@ class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
 <!-- ================= MANAJEMEN DATA ================= -->
 <li class="nav-header">MANAJEMEN DATA</li>
 
-<li class="nav-item {{ request()->is('admin/kategori*','admin/tipe*','admin/bahan*','admin/barang*','admin/stok-barang*','admin/layanan*','admin/supplier*','admin/karyawan*','admin/pelanggan*','admin/kode-akun*') ? 'menu-open' : '' }}">
+<li class="nav-item {{ request()->is('admin/kategori*','admin/tipe*','admin/bahan*','/admin/stok-opname','admin/barang*','admin/stok-barang*','admin/layanan*','admin/supplier*','admin/karyawan*','admin/pelanggan*','admin/kode-akun*') ? 'menu-open' : '' }}">
 <a href="#" class="nav-link {{ request()->is('admin/kategori*','admin/tipe*','admin/barang*','admin/layanan*','admin/supplier*','admin/karyawan*','admin/pelanggan*','admin/biaya-pengeluaran*','admin/kode-akun*','admin/modal*') ? 'active' : '' }}">
 <i class="fas fa-database nav-icon"></i>
 <p>Master Data <i class="right fas fa-angle-left"></i></p>
@@ -273,6 +273,13 @@ class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
        class="nav-link {{ request()->is('admin/bahan*') ? 'active' : '' }}">
         <i class="fas fa-boxes nav-icon"></i>
         <p>Bahan Baku</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{ url('/admin/stok-opname') }}" class="nav-link {{ request()->is('admin/stok-opname*') ? 'active' : '' }}">
+        <i class="fas fa-clipboard-check nav-icon"></i>
+        <p>Stok Opname bahan</p>
     </a>
 </li>
 
@@ -378,7 +385,7 @@ class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
 <li class="nav-item 
 {{ request()->is(
 'admin/jurnal*','admin/buku-besar*','admin/laba-rugi*',
-'admin/posisi-keuangan*','admin/catatan-keuangan*',
+'admin/posisi-keuangan*','admin/calk*',
 'admin/laporan-penjualan*','admin/laporan-pembelian*',
 'admin/laporan-pajak*','admin/laporan-shift*',
 'admin/laporan-stok*','admin/laporan-hutang*',
@@ -388,7 +395,7 @@ class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
 <a href="#" class="nav-link 
 {{ request()->is(
 'admin/jurnal*','admin/buku-besar*','admin/laba-rugi*',
-'admin/posisi-keuangan*','admin/catatan-keuangan*',
+'admin/posisi-keuangan*','admin/calk*',
 'admin/laporan-penjualan*','admin/laporan-pembelian*',
 'admin/laporan-pajak*','admin/laporan-shift*',
 'admin/laporan-stok*','admin/laporan-hutang*',
@@ -458,8 +465,8 @@ Laporan Akuntansi
     </li>
 
     <li class="nav-item">
-        <a href="{{ url('/admin/catatan-keuangan') }}" 
-           class="nav-link {{ request()->is('admin/catatan-keuangan*') ? 'active' : '' }}">
+        <a href="{{ url('/admin/calk') }}" 
+           class="nav-link {{ request()->is('admin/calk*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-file-lines"></i>
             <p>CALK</p>
         </a>

@@ -26,6 +26,17 @@ use App\Http\Controllers\Admin\BiayaPengeluaranController;
 use App\Http\Controllers\Kasir\PembayaranHutangController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\StokOpnameController;
+use App\Http\Controllers\Kasir\WeddingController;
+use App\Http\Controllers\Kasir\HomestayController;
+use App\Http\Controllers\Kasir\RiwayatController;
+use App\Http\Controllers\Kasir\HutangPelangganController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LaporanPajakController;
+use App\Http\Controllers\Admin\LaporanPenjualanController;
+use App\Http\Controllers\Admin\LaporanShiftController;
+use App\Http\Controllers\Admin\LaporanPiutangController;
+use App\Http\Controllers\Kasir\CashDrawerController;
 /*
 |--------------------------------------------------------------------------
 | HALAMAN AWAL → LOGIN
@@ -56,9 +67,9 @@ Route::middleware(['auth','role:admin'])
     ->prefix('admin')
     ->group(function () {
 
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+// 🔥 AKSES /admin
+    Route::get('/', [DashboardController::class, 'index'])
+        ->name('admin.dashboard');
 //Karyawan
         Route::resource('karyawan', KaryawanController::class);
 
@@ -66,11 +77,9 @@ Route::middleware(['auth','role:admin'])
             [KaryawanController::class, 'toggleStatus']
         )->name('karyawan.toggle');
 //kategori
-        Route::resource('kategori', KategoriController::class)
-            ->except(['destroy']);
+        Route::resource('kategori', KategoriController::class);
 //tipe
-        Route::resource('tipe', TipeController::class)
-            ->only(['index', 'store']);
+        Route::resource('tipe', TipeController::class);
 //barang
         Route::resource('barang', BarangController::class)
             ->except(['show']);
@@ -125,6 +134,15 @@ Route::middleware(['auth','role:admin'])
         [BahanBakuController::class,'destroy']
     )->name('bahan.delete');
 
+    //stok opname
+    Route::get('/stok-opname', [\App\Http\Controllers\Admin\StokOpnameController::class, 'index'])
+        ->name('stok-opname.index');
+
+    Route::post('/stok-opname/simpan', [\App\Http\Controllers\Admin\StokOpnameController::class, 'simpan'])
+        ->name('stok-opname.simpan');
+
+    Route::post('/stok-opname/sesuaikan', [\App\Http\Controllers\Admin\StokOpnameController::class, 'sesuaikan'])
+        ->name('stok-opname.sesuaikan');
     
     //kode akun
     Route::get('kode-akun', [KodeAkunController::class, 'index'])
@@ -234,6 +252,52 @@ Route::middleware(['auth','role:admin'])
     Route::get('/laporan/laba-rugi/pdf',
     [LaporanController::class,'labaRugiPdf'])
     ->name('admin.laba_rugi.pdf');
+    //posisi keuangan// POSISI KEUANGAN
+    Route::get('/posisi-keuangan',
+        [LaporanController::class,'posisiKeuangan']
+    )->name('admin.posisi_keuangan');
+    Route::get('/posisi-keuangan/pdf',
+        [LaporanController::class,'posisiKeuanganPdf']
+    )->name('admin.posisi_keuangan.pdf');
+    //CALK
+    Route::get('/calk', [LaporanController::class, 'calk'])
+    ->name('calk');
+
+    Route::get('/calk/pdf', [LaporanController::class, 'calkPdf'])
+    ->name('calk.pdf');
+
+    //laporan transaksi
+    //laporan penjualan
+    Route::get('/laporan-penjualan', [LaporanPenjualanController::class, 'index'])
+        ->name('laporan.penjualan');
+    Route::get('/laporan-penjualan/pdf', [LaporanPenjualanController::class, 'exportPdf'])
+        ->name('laporan.penjualan.pdf');
+    Route::get('/laporan-penjualan/excel', [LaporanPenjualanController::class, 'exportExcel'])
+        ->name('laporan.penjualan.excel');
+
+    //laporan pajak
+    Route::get('/laporan-pajak', [LaporanPajakController::class, 'index'])
+        ->name('laporan.pajak');
+    Route::get('/laporan-pajak/pdf', [LaporanPajakController::class, 'exportPdf'])
+        ->name('laporan.pajak.pdf');
+    Route::get('/laporan-pajak/excel', [LaporanPajakController::class, 'exportExcel'])
+        ->name('laporan.pajak.excel');
+
+    //laporan shift
+    Route::get('/laporan-shift', [LaporanShiftController::class, 'index'])
+    ->name('laporan.shift');
+    Route::get('/laporan-shift/pdf', [LaporanShiftController::class, 'exportPdf'])
+    ->name('laporan.shift.pdf');
+    Route::get('/laporan-shift/excel', [LaporanShiftController::class, 'exportExcel'])
+    ->name('laporan.shift.excel');
+    
+    //laporan piutang
+    Route::get('/laporan-piutang', [LaporanPiutangController::class, 'index'])
+        ->name('laporan.piutang');
+    Route::get('/laporan-piutang/pdf', [LaporanPiutangController::class, 'exportPdf'])
+        ->name('laporan.piutang.pdf');
+    Route::get('/laporan-piutang/excel', [LaporanPiutangController::class, 'exportExcel'])
+        ->name('laporan.piutang.excel');
     
 });
 
@@ -243,39 +307,61 @@ Route::middleware(['auth','role:admin'])
 | KASIR
 |--------------------------------------------------------------------------
 */
-Route::prefix('kasir')->group(function () {
-
+Route::middleware(['auth'])->prefix('kasir')->group(function () {
     //DASHBOARD
         Route::get('/', function () {
             return view('kasir.dashboard');
         })->name('dashboard');
 
-        // CASH DRAWER
-        Route::get('/cashdrawer', function () {
-            return view('kasir.cashdrawer');
-        })->name('cashdrawer');
+       // CASH DRAWER
+    Route::get('/cashdrawer', [CashDrawerController::class, 'index'])
+        ->name('cashdrawer');
+    Route::post('/cashdrawer/simpan', [CashDrawerController::class, 'store'])
+        ->name('cashdrawer.simpan');
+    Route::post('/cashdrawer/buka-shift', [CashDrawerController::class, 'bukaShift'])
+        ->name('cashdrawer.bukaShift');
+    Route::post('/cashdrawer/tutup-shift', [CashDrawerController::class, 'tutupShift'])
+        ->name('cashdrawer.tutupShift');
 
-        // RIWAYAT
-        Route::get('/riwayat', function () {
-            return view('kasir.riwayat');
-        })->name('riwayat');
+//RIWAYAT
+    Route::get('/kasir/riwayat-transaksi', [RiwayatController::class, 'index'])
+        ->name('kasir.riwayat');
 
         // ===== LAYANAN =====
 
         // RESTO (PAKAI CONTROLLER 🔥)
-        Route::get('/penjualan/resto', [RestoController::class, 'index'])
-            ->name('penjualan.resto');
-        Route::post('/penjualan/simpan',
-            [RestoController::class,'simpan']
-        )->name('penjualan.simpan');
+       // RESTO
+    Route::get('/penjualan/resto', [RestoController::class, 'index'])->name('penjualan.resto');
+    Route::post('/penjualan/simpan', [RestoController::class, 'simpan'])->name('penjualan.simpan');
+    Route::post('/pelanggan/simpan', [PelangganController::class, 'simpan'])
+        ->name('pelanggan.simpan');
+   Route::get('/pelanggan/cari', [PelangganController::class, 'cari'])
+    ->name('kasir.pelanggan.cari');
 
-        Route::get('/homestay', function () {
-            return view('kasir.penjualan.homestay');
-        })->name('penjualan.homestay');
+       // ===== LAYANAN =====
+    // RESTO
+    Route::get('/penjualan/resto', [RestoController::class, 'index'])->name('penjualan.resto');
+    Route::post('/penjualan/simpan', [RestoController::class, 'simpan'])->name('penjualan.simpan');
+    Route::post('/pelanggan/simpan', [PelangganController::class, 'simpan'])
+        ->name('pelanggan.simpan');
 
-        Route::get('/wedding', function () {
-            return view('kasir.penjualan.wedding'); // ← tadi typo wwedding
-        })->name('penjualan.wedding');
+    //HOMESTAY
+    Route::get('/homestay', [HomestayController::class, 'index'])
+        ->name('penjualan.homestay');
+    Route::post('/homestay/simpan', [HomestayController::class, 'simpan'])
+        ->name('kasir.homestay.simpan');  
+
+    // WEDDING
+    Route::get('/kasir/penjualan/wedding', [WeddingController::class, 'index'])
+        ->name('penjualan.wedding');
+    Route::post('/kasir/penjualan/wedding/simpan', [WeddingController::class, 'store'])
+        ->name('penjualan.wedding.simpan');
+
+//pembayaran hutang pelanggan
+    Route::get('/hutang-pelanggan', [HutangPelangganController::class, 'index'])
+        ->name('hutang_pelanggan');
+    Route::post('/hutang-pelanggan/bayar', [HutangPelangganController::class, 'bayar'])
+        ->name('hutang_pelanggan.bayar');
 
     //pembelian
   Route::get('/pembelian',

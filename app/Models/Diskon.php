@@ -19,4 +19,8 @@ class Diskon extends Model
     'max_pesanan',
     'status'
 ];
+public function penjualan()
+{
+    return $this->hasMany(\App\Models\Penjualan::class, 'id_diskon', 'id_diskon');
+}
 }

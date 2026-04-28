@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Pelanggan;
+use App\Models\User;
+use App\Models\Pajak;
+use App\Models\Diskon;
+use App\Models\HistoriPembayaranHutang;
 
 class Penjualan extends Model
 {
@@ -17,32 +22,39 @@ class Penjualan extends Model
         'kode_transaksi',
         'id_user',
         'id_karyawan',
-        'id_shift',
         'id_pelanggan',
-        'tanggal',
         'id_tipe',
-        'total',
-        'bayar',
-        'sisa_bayar',
+        'id_kategori',
         'id_pajak',
         'id_diskon',
+        'id_shift',
+        'tanggal',
+        'nama_pelanggan',
+        'keterangan',
+        'total',
+        'bayar',
+        'sisa_hutang',
         'metode_bayar',
         'status',
-        'keterangan'
+        'sumber_transaksi',
+        'tanggal_acara',
+        'jam_acara',
     ];
 
     protected $casts = [
         'tanggal' => 'datetime',
+        'tanggal_acara' => 'date',
         'total' => 'integer',
         'bayar' => 'integer',
-        'sisa_bayar' => 'integer'
+        'sisa_hutang' => 'integer'
     ];
 
-    // Status pembayaran
+    // ================= STATUS =================
     const STATUS_LUNAS = 'lunas';
     const STATUS_BELUM = 'belum';
+    const STATUS_DP = 'dp';
 
-    // Metode pembayaran
+    // ================= METODE =================
     const METODE_TUNAI = 'tunai';
     const METODE_DEBIT = 'debit';
     const METODE_KREDIT = 'kredit';
@@ -50,96 +62,147 @@ class Penjualan extends Model
     const METODE_EWALLET = 'e_wallet';
     const METODE_TRANSFER = 'transfer';
 
+    // ================= SUMBER =================
+    const SUMBER_KASIR = 'kasir';
+    const SUMBER_PELAYAN = 'pelayan';
+    const SUMBER_WEDDING = 'wedding';
+    const SUMBER_HOMESTAY = 'homestay';
+
     /*
     |--------------------------------------------------------------------------
     | RELASI
     |--------------------------------------------------------------------------
     */
 
-    // Relasi ke User (Kasir)
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id');
+    public function karyawanRel(){
+        return $this->belongsTo(\App\Models\Karyawan::class, 'id_karyawan', 'id_karyawan');
     }
 
-    // Relasi ke Pelanggan
+    public function tipeRel(){
+        return $this->belongsTo(\App\Models\Tipe::class, 'id_tipe', 'id_tipe');
+    }
+
+    public function userRel(){
+        return $this->belongsTo(\App\Models\User::class, 'id_user');
+    }
+
     public function pelanggan()
     {
         return $this->belongsTo(Pelanggan::class, 'id_pelanggan', 'id_pelanggan');
     }
 
-    // Relasi ke Pajak
+    public function kategoriRel()
+    {
+        return $this->belongsTo(Kategori::class, 'id_kategori');
+    }
+
+    public function detailLayanan()
+    {
+        return $this->hasMany(DetailPenjualanLayanan::class, 'id_penjualan', 'id_penjualan');
+    }
+
+    // ================= KHUSUS CATAT PESANAN =================
+    public function catatPesananPelayan($keterangan = null)
+    {
+        $this->status = self::STATUS_BELUM;
+        $this->bayar = 0;
+        $this->sisa_hutang = $this->total;
+        $this->metode_bayar = null; // belum bayar
+        $this->keterangan = $keterangan;
+
+        return $this->save();
+    }
+
+    public function pelangganRel()
+    {
+        return $this->belongsTo(Pelanggan::class, 'id_pelanggan', 'id_pelanggan');
+    }
+
     public function pajak()
     {
         return $this->belongsTo(Pajak::class, 'id_pajak', 'id_pajak');
     }
 
-    // Relasi ke Detail Penjualan
-    public function detailPenjualan()
+    public function diskon()
     {
-        return $this->hasMany(DetailPenjualan::class, 'id_penjualan', 'id_penjualan');
+        return $this->belongsTo(Diskon::class, 'id_diskon', 'id_diskon');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(
+            \App\Models\DetailPenjualan::class,
+            'id_penjualan',
+            'id_penjualan'
+        );
+    }
+
+    public function historiPembayaran()
+    {
+        return $this->hasMany(
+            HistoriPembayaranHutang::class,
+            'id_penjualan',
+            'id_penjualan'
+        );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | GENERATE KODE TRANSAKSI
+    | GENERATE KODE
     |--------------------------------------------------------------------------
     */
 
     public static function generateKodeTransaksi()
     {
-        $date = date('Ymd');
+        $date = now()->format('Ymd');
         $prefix = 'INV';
 
-        $last = self::whereDate('tanggal', date('Y-m-d'))->count();
+        $last = self::whereDate('tanggal', now()->toDateString())->count();
 
-        $number = $last + 1;
-
-        return $prefix . '-' . $date . '-' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $prefix . '-' . $date . '-' . str_pad($last + 1, 4, '0', STR_PAD_LEFT);
     }
 
     /*
     |--------------------------------------------------------------------------
-    | SCOPE QUERY
+    | SCOPES
     |--------------------------------------------------------------------------
     */
 
-    // Transaksi hari ini
     public function scopeHariIni($query)
     {
-        return $query->whereDate('tanggal', date('Y-m-d'));
+        return $query->whereDate('tanggal', now()->toDateString());
     }
 
-    // Berdasarkan status
     public function scopeStatus($query, $status)
     {
         return $query->where('status', $status);
     }
 
+    public function scopePesananPelayan($query)
+    {
+        return $query->where('status', self::STATUS_BELUM)
+            ->where('sumber_transaksi', self::SUMBER_PELAYAN);
+    }
+
     /*
     |--------------------------------------------------------------------------
-    | HELPER
+    | HELPERS
     |--------------------------------------------------------------------------
     */
 
-    // Cek apakah lunas
     public function isLunas()
     {
-        return $this->sisa_bayar <= 0;
+        return $this->sisa_hutang <= 0;
     }
 
-    // Update pembayaran
     public function updateStatusPembayaran($bayar, $metode = null)
     {
         $this->bayar = $bayar;
-        $this->sisa_bayar = $this->total - $bayar;
+        $this->sisa_hutang = max($this->total - $bayar, 0);
 
-        if ($this->sisa_bayar <= 0) {
-            $this->status = self::STATUS_LUNAS;
-            $this->sisa_bayar = 0;
-        } else {
-            $this->status = self::STATUS_BELUM;
-        }
+        $this->status = $this->sisa_hutang <= 0
+            ? self::STATUS_LUNAS
+            : self::STATUS_DP;
 
         if ($metode) {
             $this->metode_bayar = $metode;
@@ -147,4 +210,9 @@ class Penjualan extends Model
 
         return $this->save();
     }
+
+    public function getTotalBersihAttribute()
+        {
+            return $this->total - $this->nilai_pajak;
+        }
 }

@@ -17,7 +17,8 @@ class Layanan extends Model
         'id_kategori',
         'harga',
         'deskripsi',
-        'status'
+        'status',
+        'gambar'
     ];
 
     // relasi ke tabel tipe
@@ -26,8 +27,8 @@ class Layanan extends Model
         return $this->belongsTo(Tipe::class, 'id_tipe', 'id_tipe');
     }
 
-    public function kategori()
+    public function kategoriRel()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
+        return $this->belongsTo(\App\Models\Kategori::class, 'id_kategori');
     }
 }
