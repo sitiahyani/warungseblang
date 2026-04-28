@@ -1,0 +1,27 @@
+/* ================================
+   GLOBAL SIDEBAR BLUE THEME
+   ================================ */
+
+.main-sidebar {
+    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%) !important;
+}
+
+.main-sidebar .brand-link {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.main-sidebar .brand-text,
+.main-sidebar .nav-link,
+.main-sidebar .nav-icon {
+    color: #ffffff !important;
+}
+
+.main-sidebar .nav-link:hover {
+    background-color: rgba(255,255,255,0.12) !important;
+}
+
+.main-sidebar .nav-link.active {
+    background-color: rgba(255,255,255,0.2) !important;
+    border-radius: 6px;
+}

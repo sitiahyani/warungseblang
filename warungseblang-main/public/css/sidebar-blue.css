@@ -1,0 +1,42 @@
+/* ================================
+   SIDEBAR BIRU ELEGAN (GLOBAL)
+   ================================ */
+
+aside.main-sidebar {
+    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%) !important;
+}
+
+/* brand */
+aside.main-sidebar .brand-link {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+aside.main-sidebar .brand-text {
+    font-weight: 600;
+    color: #ffffff !important;
+}
+
+/* menu text & icon */
+aside.main-sidebar .nav-link,
+aside.main-sidebar .nav-icon {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* hover */
+aside.main-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* active */
+aside.main-sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+    border-radius: 6px;
+}
+
+/* badge */
+aside.main-sidebar .badge {
+    background-color: #0ea5e9 !important;
+    color: #ffffff !important;
+}
